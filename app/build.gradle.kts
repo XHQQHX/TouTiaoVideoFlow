@@ -55,6 +55,7 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.compose.foundation:foundation:1.5.4")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
