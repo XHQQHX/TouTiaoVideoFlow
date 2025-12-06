@@ -16,20 +16,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.zIndex
+import com.example.toutiaovideoflow.data.model.VideoItem
 import com.example.toutiaovideoflow.ui.theme.*
 
 @Composable
 fun VideoFloatingUI (
     modifier: Modifier = Modifier,
+    item: VideoItem
 ){
     Box(modifier = modifier
         .fillMaxSize()
-        .background(PitchBlack)
+
         .padding(16.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(bottom = 10.dp)
                 .align(Alignment.BottomCenter),
             verticalAlignment = Alignment.Bottom
         ) {
@@ -42,13 +45,13 @@ fun VideoFloatingUI (
                     modifier = Modifier
                 ) {
                     Text(
-                        text = "@ ${stringResource(id = R.string.author)}",
+                        text = "@ ${item.author}",
                         color = White,
                         fontSize = 20.sp
 
                     )
                     Text(
-                        text = "# ${stringResource(id = R.string.title)}",
+                        text = "# ${item.title}",
                         color = White,
                         fontSize = 16.sp
                     )
@@ -106,15 +109,15 @@ fun VideoFloatingUI (
                     }
                     IconTextItem(
                         iconResId = R.drawable.ic_like,
-                        text = stringResource(id = R.string.likeCount),
+                        text = item.likeCount,
                     )
                     IconTextItem(
                         iconResId = R.drawable.ic_comment,
-                        text = stringResource(id = R.string.commentCount),
+                        text = item.commentCount,
                     )
                     IconTextItem(
                         iconResId = R.drawable.ic_collect,
-                        text = stringResource(id = R.string.collectCount),
+                        text = item.collectCount,
                     )
                     IconTextItem(
                         iconResId = R.drawable.ic_share,
@@ -162,5 +165,5 @@ fun IconTextItem(
 @Preview
 @Composable
 fun VideoFloatingUIPreview() {
-    VideoFloatingUI()
+    VideoFloatingUI(item = VideoItem("", "", "作者", "标题", "点赞数", "评论数", "收藏数"))
 }
