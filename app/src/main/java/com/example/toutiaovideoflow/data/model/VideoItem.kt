@@ -1,13 +1,11 @@
 package com.example.toutiaovideoflow.data.model
 
 data class VideoItem(
-    val id: Int,
+    val id: String,
     val url: String,
-    val title: String,
     val author: String,
-    val avatar: String,
-    val cover: String,
-    val likeCount: Int,
-    val commentCount: Int,
-    val collectCount: Int
+    val title: String,
+    val likeCount: String,
+    val commentCount: String,
+    val collectCount: String
 )

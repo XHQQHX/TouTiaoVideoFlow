@@ -1,4 +1,4 @@
-package com.example.toutiaovideoflow.ui.video
+package com.example.toutiaovideoflow.ui.video.components
 import com.example.toutiaovideoflow.R
 
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.zIndex
 import com.example.toutiaovideoflow.ui.theme.*
 
 @Composable
-fun VideoItemPage (
+fun VideoFloatingUI (
     modifier: Modifier = Modifier,
 ){
     Box(modifier = modifier
@@ -161,6 +161,6 @@ fun IconTextItem(
 
 @Preview
 @Composable
-fun VideoItemPagePreview() {
-    VideoItemPage()
+fun VideoFloatingUIPreview() {
+    VideoFloatingUI()
 }
