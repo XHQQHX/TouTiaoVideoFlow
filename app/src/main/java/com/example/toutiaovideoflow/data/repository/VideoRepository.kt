@@ -4,7 +4,7 @@ import com.example.toutiaovideoflow.data.model.VideoItem
 import com.example.toutiaovideoflow.utils.RandomUtils.generateRandomNumber
 import com.example.toutiaovideoflow.utils.RandomUtils.getRandomAuth
 import com.example.toutiaovideoflow.utils.RandomUtils.getRandomVideoUrl
-
+//数据仓库
 class VideoRepository {
     fun createVideoItem(id: String): VideoItem {
         return VideoItem(

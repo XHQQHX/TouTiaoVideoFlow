@@ -23,4 +23,10 @@ class VideoPlayer(private val context: Context) {
         exoPlayer?.release()
         exoPlayer = null
     }
+
+    fun getCurrentPosition(): Long = exoPlayer?.currentPosition ?: 0L
+    fun getDuration(): Long = exoPlayer?.duration ?: 0L
+    fun seekTo(position: Long) {
+        exoPlayer?.seekTo(position)
+    }
 }
