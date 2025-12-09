@@ -2,11 +2,13 @@ package com.example.toutiaovideoflow.ui.video.components
 
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -16,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.util.Log
+import coil.compose.rememberAsyncImagePainter
 import com.example.toutiaovideoflow.data.model.VideoItem
 import com.example.toutiaovideoflow.player.VideoPlayer
 import com.example.toutiaovideoflow.ui.theme.PitchBlack
@@ -29,6 +32,31 @@ fun VideoPlayerPage(
     isCurrentPage: Boolean
 ) {
     val context = LocalContext.current
+
+    if (item.isImage) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(PitchBlack)
+        ) {
+            // 显示图片
+            Image(
+                painter = rememberAsyncImagePainter(item.url),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Fit
+            )
+
+            // 显示浮动UI
+            VideoFloatingUI(
+                modifier = Modifier.fillMaxSize(),
+                item = item,
+                isDragging = false,
+                isPlaying = false
+            )
+        }
+        return
+    }
 
     var isPlaying by remember { mutableStateOf(false) }
     var currentPosition by remember { mutableLongStateOf(0L) }

@@ -48,4 +48,14 @@ object RandomUtils {
     fun getRandomVideoUrl(): String {
         return videoUrlList.random()
     }
+    private val imageUrlList = listOf(
+        "android.resource://com.example.toutiaovideoflow/${R.drawable.im_1}",
+        "android.resource://com.example.toutiaovideoflow/${R.drawable.im_2}",
+        "android.resource://com.example.toutiaovideoflow/${R.drawable.im_3}",
+        "android.resource://com.example.toutiaovideoflow/${R.drawable.im_4}",
+        "android.resource://com.example.toutiaovideoflow/${R.drawable.im_5}",
+    )
+    fun getRandomImageUrl(): String {
+        return imageUrlList.random()
+    }
 }

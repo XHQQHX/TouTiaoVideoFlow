@@ -3,6 +3,7 @@ package com.example.toutiaovideoflow.data.repository
 import com.example.toutiaovideoflow.data.model.VideoItem
 import com.example.toutiaovideoflow.utils.RandomUtils.generateRandomNumber
 import com.example.toutiaovideoflow.utils.RandomUtils.getRandomAuth
+import com.example.toutiaovideoflow.utils.RandomUtils.getRandomImageUrl
 import com.example.toutiaovideoflow.utils.RandomUtils.getRandomVideoUrl
 //数据仓库
 class VideoRepository {
@@ -17,10 +18,28 @@ class VideoRepository {
             collectCount = generateRandomNumber(0,10000).toString()
         )
     }
+    fun createImageItem(id: String): VideoItem {
+        return VideoItem(
+            id = id,
+            url = getRandomImageUrl(),
+            author = getRandomAuth(),
+            title = "测试用图片流$id",
+            likeCount = generateRandomNumber(0,10000).toString(),
+            commentCount = generateRandomNumber(0,10000).toString(),
+            collectCount = generateRandomNumber(0,10000).toString(),
+            isImage = true,
+        )
+    }
     fun createVideoList(count: Int): List<VideoItem> {
-        return (1..count).map { id ->
-            createVideoItem(id.toString())
+        val result = mutableListOf<VideoItem>()
+        for (i in 1..count) {
+            if(i%5==0){
+                result.add(createImageItem(i.toString()))
+            } else {
+                result.add(createVideoItem(i.toString()))
+            }
         }
+        return result
     }
     private val allVideos = createVideoList(50)
 

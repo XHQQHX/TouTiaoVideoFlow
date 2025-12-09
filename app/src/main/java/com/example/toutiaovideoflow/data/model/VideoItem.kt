@@ -7,5 +7,6 @@ data class VideoItem(
     val title: String,
     val likeCount: String,
     val commentCount: String,
-    val collectCount: String
+    val collectCount: String,
+    val isImage: Boolean = false
 )
