@@ -1,4 +1,5 @@
 package com.example.toutiaovideoflow.utils
+import com.example.toutiaovideoflow.R
 
 object RandomUtils {
     fun generateRandomNumber(min: Int, max: Int): Int {
@@ -20,6 +21,8 @@ object RandomUtils {
         return authList.random()
     }
     private val videoUrlList = listOf(
+        "android.resource://com.example.toutiaovideoflow/${R.raw.sp1}",
+        "android.resource://com.example.toutiaovideoflow/${R.raw.sp2}",
         "http://vjs.zencdn.net/v/oceans.mp4",
         "https://media.w3.org/2010/05/sintel/trailer.mp4",
         "https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-360p.mp4",

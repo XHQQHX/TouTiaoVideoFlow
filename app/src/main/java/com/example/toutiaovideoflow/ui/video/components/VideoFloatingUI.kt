@@ -1,4 +1,5 @@
 package com.example.toutiaovideoflow.ui.video.components
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import com.example.toutiaovideoflow.R
@@ -31,6 +32,7 @@ fun VideoFloatingUI (
     Box(modifier = modifier
         .fillMaxSize()
         .padding(16.dp)
+        .padding(bottom = 12.dp)
     ) {
         Row(
             modifier = Modifier
@@ -164,6 +166,7 @@ fun IconTextItem(
     }
 }
 
+@SuppressLint("LocalContextResourcesRead", "DiscouragedApi")
 @Composable
 @DrawableRes
 fun getAvatarResId(id: String): Int {
