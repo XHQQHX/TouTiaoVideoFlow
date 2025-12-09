@@ -22,10 +22,20 @@ class VideoRepository {
             createVideoItem(id.toString())
         }
     }
-    private val videoList
-        get() = createVideoList(10)
+    private val allVideos = createVideoList(50)
 
-    fun loadPage(page: Int = 0, pageSize: Int = 2): List<VideoItem> {
-        return videoList
+    // cursor 分页：cursor 是下一页的起始 index
+    fun loadPage(cursor: Int = 0, limit: Int = 5): Pair<List<VideoItem>, Int?> {
+
+        if (cursor >= allVideos.size) {
+            return emptyList<VideoItem>() to null
+        }
+
+        val end = (cursor + limit).coerceAtMost(allVideos.size)
+        val list = allVideos.subList(cursor, end)
+
+        val nextCursor = if (end < allVideos.size) end else null
+
+        return list to nextCursor
     }
 }

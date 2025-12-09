@@ -306,8 +306,9 @@ fun IconTextItem(
 @DrawableRes
 fun getAvatarResId(id: String): Int {
     val context = LocalContext.current
+    val index = id.toBigInteger().mod(16.toBigInteger()).toInt()
     val resId = context.resources.getIdentifier(
-        "av_$id",
+        "av_$index",
         "mipmap",
         context.packageName
     )

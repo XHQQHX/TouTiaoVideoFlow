@@ -72,6 +72,7 @@ private fun LandscapeControlBar(
     onPlayPause: () -> Unit,
     onDraggingChanged: (Boolean) -> Unit
 ) {
+    var draggingTime by remember { mutableStateOf<Long?>(null) }
     // 横屏模式的UI实现
     Box(modifier = modifier.fillMaxSize()) {
         val context = LocalContext.current
@@ -127,18 +128,38 @@ private fun LandscapeControlBar(
                 tint = WhiteTransparent
             )
 
-            // 进度条
-            VideoSlider(
+
+            // 横屏的进度条（带左侧时间）
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
                     .padding(bottom = 60.dp)
-                    .align(Alignment.BottomCenter),
-                currentPosition = currentPosition,
-                duration = duration,
-                onSeek = onSeek,
-                onDraggingChanged = onDraggingChanged
-            )
+                    .align(Alignment.BottomEnd),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // 左侧时间
+                Text(
+                    text = formatTime(draggingTime ?: currentPosition) + " / ${formatTime(duration)}",
+                    color = White,
+                    fontSize = 14.sp
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // 进度条
+                VideoSlider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    currentPosition = currentPosition,
+                    duration = duration,
+                    onSeek = onSeek,
+                    onDraggingChanged = onDraggingChanged,
+                    onDraggingTime = { draggingTime = it }
+                )
+            }
+
         }
     }
 }
@@ -157,6 +178,7 @@ private fun PortraitControlBar(
     Box(modifier = modifier.fillMaxSize()) {
         val context = LocalContext.current
         val activity = context as Activity
+        var draggingTime by remember { mutableStateOf<Long?>(null) }
 
         // 播放/暂停按钮
         Box(
@@ -245,6 +267,22 @@ private fun PortraitControlBar(
             }
         }
 
+        // 拖动时间显示
+        draggingTime?.let { time ->
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .offset(y = (-60).dp)
+                    .background(Black.copy(alpha = 0.6f), RoundedCornerShape(8.dp))
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Text(
+                    text = "${formatTime(time)} / ${formatTime(duration)}",
+                    color = White,
+                    fontSize = 14.sp
+                )
+            }
+        }
         // 进度条
         VideoSlider(
             modifier = Modifier
@@ -254,11 +292,16 @@ private fun PortraitControlBar(
             currentPosition = currentPosition,
             duration = duration,
             onSeek = onSeek,
-            onDraggingChanged = onDraggingChanged
+            onDraggingChanged = { isDragging ->
+                if (!isDragging) draggingTime = null
+                onDraggingChanged(isDragging)
+            },
+            onDraggingTime = {draggingTime = it}
         )
     }
 }
 
+// 视频进度条
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun VideoSlider(
@@ -266,7 +309,8 @@ private fun VideoSlider(
     currentPosition: Long,
     duration: Long,
     onSeek: (Long) -> Unit,
-    onDraggingChanged: (Boolean) -> Unit
+    onDraggingChanged: (Boolean) -> Unit,
+    onDraggingTime: (Long) -> Unit = {},
 ) {
     var isDragging by remember { mutableStateOf(false) }
     var dragPosition by remember { mutableFloatStateOf(0f) }
@@ -284,7 +328,9 @@ private fun VideoSlider(
                 isDragging = true
                 onDraggingChanged(true)
             }
-            onSeek((value * duration).toLong())
+            val time = (value * duration).toLong()
+            onDraggingTime(time)
+            onSeek(time)
         },
         onValueChangeFinished = {
             isDragging = false
@@ -331,3 +377,9 @@ private fun VideoSlider(
     )
 }
 
+fun formatTime(ms: Long): String {
+    val totalSeconds = ms / 1000
+    val minutes = totalSeconds / 60
+    val seconds = totalSeconds % 60
+    return "%02d:%02d".format(minutes, seconds)
+}
