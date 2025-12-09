@@ -14,6 +14,8 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.util.Log
 import com.example.toutiaovideoflow.data.model.VideoItem
 import com.example.toutiaovideoflow.player.VideoPlayer
 import com.example.toutiaovideoflow.ui.theme.PitchBlack
@@ -39,14 +41,18 @@ fun VideoPlayerPage(
 
     // 每次切换视频时更新 MediaItem
     LaunchedEffect(item.id) {
+        PerformanceMonitor.reset()
+        Log.d("VideoPerformance", "切换到视频: ${item.id}, URL: ${item.url}")
         exoPlayer.setMediaItem(MediaItem.fromUri(item.url))
         exoPlayer.prepare()
     }
 
     LaunchedEffect(isCurrentPage) {
         if (isCurrentPage) {
+            Log.d("VideoPerformance", "视频开始播放: ${item.id}")
             exoPlayer.play()  // 当前页面才播放
         } else {
+            Log.d("VideoPerformance", "视频暂停: ${item.id}")
             exoPlayer.pause()  // 非当前页面暂停
         }
     }
@@ -58,14 +64,34 @@ fun VideoPlayerPage(
                 if (playbackState == Player.STATE_READY) {
                     duration = exoPlayer.duration
                 }
+                when (playbackState) {
+                    Player.STATE_BUFFERING -> {
+                        Log.d("VideoPerformance", "视频进入缓冲状态: ${item.id}")
+                    }
+                    Player.STATE_READY -> {
+                        Log.d("VideoPerformance", "视频准备就绪: ${item.id}")
+                    }
+                    Player.STATE_ENDED -> {
+                        Log.d("VideoPerformance", "视频播放结束: ${item.id}")
+                    }
+
+                    Player.STATE_IDLE -> {
+                        TODO()
+                    }
+                }
             }
 
             override fun onVideoSizeChanged(videoSize: androidx.media3.common.VideoSize) {
                 videoAspectRatio = videoSize.width.toFloat() / videoSize.height.toFloat()
+                Log.d("VideoPerformance", "视频尺寸变化: ${item.id}, 宽度=${videoSize.width}, 高度=${videoSize.height}")
             }
 
             override fun onIsPlayingChanged(playing: Boolean) {
                 isPlaying = playing
+                Log.d("VideoPerformance", "视频播放状态变化: ${item.id}, 正在播放=$playing")
+            }
+            override fun onPlayerError(error: PlaybackException) {
+                Log.e("VideoPerformance", "视频播放错误: ${item.id}, 错误=${error.message}")
             }
         }
         exoPlayer.addListener(listener)

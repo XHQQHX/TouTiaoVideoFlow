@@ -195,7 +195,8 @@ private fun PortraitControlBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(16.dp)
+                .padding(top = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Icon(
