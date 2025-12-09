@@ -68,7 +68,6 @@ fun VideoPlayerPage(item: VideoItem) {
         }
     }
     DisposableEffect(Unit) {
-        // 页面可见时播放
         //exoPlayer.play()
         onDispose {
             exoPlayer.pause()
@@ -117,11 +116,11 @@ fun VideoPlayerPage(item: VideoItem) {
             }
         )
         // 右侧浮动 UI
-        if(!isLandscape && !isDragging) {
-            VideoFloatingUI(
-                modifier = Modifier.fillMaxSize(),
-                item = item
-            )
-        }
+        VideoFloatingUI(
+            modifier = Modifier.fillMaxSize(),
+            item = item,
+            isDragging = isDragging,
+            isPlaying = isPlaying
+        )
     }
 }
