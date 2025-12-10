@@ -6,7 +6,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.media3.common.MediaItem
@@ -15,6 +19,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.util.Log
@@ -22,6 +27,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.toutiaovideoflow.data.model.VideoItem
 import com.example.toutiaovideoflow.player.VideoPlayer
 import com.example.toutiaovideoflow.ui.theme.PitchBlack
+import com.example.toutiaovideoflow.utils.RandomUtils.generateImageSeries
+import com.example.toutiaovideoflow.utils.RandomUtils.getBaseIndexFromUrl
 import kotlinx.coroutines.delay
 
 @androidx.annotation.OptIn(UnstableApi::class)
@@ -34,18 +41,28 @@ fun VideoPlayerPage(
     val context = LocalContext.current
 
     if (item.isImage) {
+        val startIndex = remember { getBaseIndexFromUrl(item.url) }
+        val imageList = remember { generateImageSeries(startIndex, item.imageNumber.toInt()) }
+        val pagerState = rememberPagerState(initialPage = startIndex, pageCount = { item.imageNumber.toInt() })
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(PitchBlack)
         ) {
             // 显示图片
-            Image(
-                painter = rememberAsyncImagePainter(item.url),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Fit
-            )
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
+            ) { page ->
+
+                Image(
+                    painter = rememberAsyncImagePainter(imageList[page]),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+            }
 
             // 显示浮动UI
             VideoFloatingUI(
@@ -53,6 +70,15 @@ fun VideoPlayerPage(
                 item = item,
                 isDragging = false,
                 isPlaying = false
+            )
+
+            // 显示进度条
+            BottomPagerIndicator(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 24.dp),
+                pageCount = imageList.size,
+                currentPage = pagerState.currentPage
             )
         }
         return

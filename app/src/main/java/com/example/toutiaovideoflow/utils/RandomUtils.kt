@@ -1,5 +1,6 @@
 package com.example.toutiaovideoflow.utils
 import com.example.toutiaovideoflow.R
+import kotlin.text.get
 
 object RandomUtils {
     fun generateRandomNumber(min: Int, max: Int): Int {
@@ -57,5 +58,17 @@ object RandomUtils {
     )
     fun getRandomImageUrl(): String {
         return imageUrlList.random()
+    }
+    fun getBaseIndexFromUrl(url: String): Int {
+        val regex = "im_(\\d+)".toRegex()
+        val match = regex.find(url)
+        return match?.groupValues?.get(1)?.toIntOrNull() ?: 1
+    }
+    fun generateImageSeries(startIndex: Int, count: Int): List<String> {
+        val max = imageUrlList.size // 5
+        return List(count) { offset ->
+            val index = (startIndex - 1 + offset) % max   // 0~4
+            imageUrlList[index]
+        }
     }
 }

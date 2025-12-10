@@ -27,6 +27,7 @@ fun VideoScreen(vm: VideoViewModel = viewModel()) {
         }
     }
 
+    // 当页面切换时，释放不在当前页面的播放器，优化启播速度
     LaunchedEffect(pagerState.currentPage) {
         val currentPage = pagerState.currentPage
         val pagesToKeep = setOf(currentPage - 1, currentPage, currentPage + 1)
@@ -38,6 +39,7 @@ fun VideoScreen(vm: VideoViewModel = viewModel()) {
             }
         }
     }
+
 
     VerticalPager(
         state = pagerState,

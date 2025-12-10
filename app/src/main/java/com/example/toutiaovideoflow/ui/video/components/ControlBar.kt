@@ -378,6 +378,32 @@ private fun VideoSlider(
     )
 }
 
+@Composable
+fun BottomPagerIndicator(
+    modifier: Modifier = Modifier,
+    pageCount: Int,
+    currentPage: Int
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        repeat(pageCount) { index ->
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 2.dp)
+                    .height(3.dp)
+                    .width(if (index == currentPage) 22.dp else 8.dp)
+                    .background(
+                        if (index == currentPage)White else White.copy(alpha = 0.3f),
+                        shape = RoundedCornerShape(2.dp)
+                    )
+            )
+        }
+    }
+}
+
 fun formatTime(ms: Long): String {
     val totalSeconds = ms / 1000
     val minutes = totalSeconds / 60

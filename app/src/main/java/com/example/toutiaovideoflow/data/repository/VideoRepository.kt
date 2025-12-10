@@ -28,6 +28,7 @@ class VideoRepository {
             commentCount = generateRandomNumber(0,10000).toString(),
             collectCount = generateRandomNumber(0,10000).toString(),
             isImage = true,
+            imageNumber = generateRandomNumber(1,5)
         )
     }
     fun createVideoList(count: Int): List<VideoItem> {
